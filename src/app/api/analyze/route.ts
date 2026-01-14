@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseCSV } from '@/utils/csvParser';
 import { writeFileSync, readFileSync } from 'fs';
+import * as XLSX from 'xlsx';
 import { join } from 'path';
 
 export async function POST(req: NextRequest) {
@@ -18,9 +19,35 @@ export async function POST(req: NextRequest) {
       size: file.size,
     });
 
+    // Read file into a buffer once; convert Excel to CSV if needed
+    console.log('📄 Reading uploaded file into buffer...');
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    const fileName = file.name || '';
+    const fileType = file.type || '';
+
+    const isExcel = /\.xls(x)?$/i.test(fileName) || fileType.includes('spreadsheet') || fileType.includes('excel');
+
+    let csvContent = '';
+    if (isExcel) {
+      try {
+        console.log('📥 Detected Excel file, converting to CSV...');
+        const workbook = XLSX.read(buffer, { type: 'buffer' });
+        const firstSheet = workbook.SheetNames[0];
+        csvContent = XLSX.utils.sheet_to_csv(workbook.Sheets[firstSheet]);
+        console.log('✅ Excel -> CSV conversion complete, csv length:', csvContent.length);
+      } catch (ex) {
+        console.error('❌ Failed to convert Excel to CSV:', ex);
+        return NextResponse.json({ error: 'Failed to parse Excel file' }, { status: 400 });
+      }
+    } else {
+      console.log('📄 Treating upload as CSV/text...');
+      csvContent = buffer.toString('utf-8');
+    }
+
     // Parse CSV locally to extract monthly spending and transaction data
-    console.log('📄 Reading and parsing CSV file...');
-    const csvContent = await file.text();
+    console.log('📄 Parsing CSV content...');
     const csvAnalysis = parseCSV(csvContent);
     console.log('✅ CSV parsed:', {
       transactions: csvAnalysis.transactionCount,
@@ -57,15 +84,13 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Read the file content as text (for CSV) or buffer (for Excel)
-    console.log('📄 Converting file to base64...');
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const fileBase64 = buffer.toString('base64');
-    console.log('✅ File converted, base64 length:', fileBase64.length);
+    // Convert CSV content to base64 for inline AI upload
+    console.log('📄 Converting CSV content to base64 for AI request...');
+    const fileBase64 = Buffer.from(csvContent).toString('base64');
+    console.log('✅ CSV converted, base64 length:', fileBase64.length);
     
-    // Determine MIME type
-    const mimeType = file.type || 'text/csv';
+    // Always use CSV MIME type since we converted Excel to CSV internally
+    const mimeType = 'text/csv';
     console.log('📋 MIME type:', mimeType);
 
     // Use Google's Generative AI REST API with proper format

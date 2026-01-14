@@ -18,8 +18,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
               border: 'none'
             }}>
-                <p style={{ margin: '0 0 4px 0', color: '#1f2937', fontWeight: '500', fontSize: '14px' }}>{`${label}`}</p>
-                <p style={{ margin: 0, color: '#2563eb', fontSize: '14px' }}>{`Spending: $${payload[0].value.toFixed(2)}`}</p>
+                <p style={{ margin: '0 0 4px 0', color: '#1f2937', fontWeight: '500', fontSize: '16px' }}>{`${label}`}</p>
+                <p style={{ margin: 0, color: '#2563eb', fontSize: '16px' }}>{`Spending: $${payload[0].value.toFixed(2)}`}</p>
             </div>
         );
     }
@@ -71,7 +71,7 @@ const SpendingBarChart: React.FC<SpendingBarChartProps> = ({ monthlyData, dailyD
         x={x}
         y={y}
         fill="#9ca3af"
-        fontSize="12px"
+        fontSize="13px"
         textAnchor="middle"
         dy={4}
       >
@@ -125,7 +125,7 @@ const SpendingBarChart: React.FC<SpendingBarChartProps> = ({ monthlyData, dailyD
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
             <XAxis dataKey="name" tick={<SmartXAxis />} stroke="#f0f0f0" interval={0} />
-            <YAxis tick={{ fill: '#9ca3af', fontSize: '13px' }} stroke="#f0f0f0" />
+            <YAxis tick={{ fill: '#9ca3af', fontSize: '14px' }} stroke="#f0f0f0" />
             <Tooltip cursor={{fill: 'rgba(37, 99, 235, 0.05)'}} content={<CustomTooltip />} />
             <Bar dataKey="spending" fill="#2563eb" radius={[6, 6, 0, 0]} />
           </BarChart>

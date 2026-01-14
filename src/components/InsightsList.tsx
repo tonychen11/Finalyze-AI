@@ -22,11 +22,11 @@ const InsightsList: React.FC<InsightsListProps> = ({ title, items, type }) => {
         <div 
             onClick={() => setIsExpanded(!isExpanded)}
             style={{
-              backgroundColor: '#ffffff',
               padding: '28px',
               borderRadius: '16px',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-              border: '1px solid #f0f0f0',
+              border: '1px solid var(--card-border)',
+              backgroundColor: 'var(--card-bg)',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
               height: isExpanded ? '425px' : '80px',
@@ -35,6 +35,7 @@ const InsightsList: React.FC<InsightsListProps> = ({ title, items, type }) => {
               justifyContent: isExpanded ? 'flex-start' : 'center',
               overflow: isExpanded ? 'auto' : 'hidden'
             }}
+            className="dark:bg-slate-800 dark:border-slate-700"
             onMouseEnter={(e) => {
               if (!isExpanded) {
                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.10)';
@@ -59,8 +60,8 @@ const InsightsList: React.FC<InsightsListProps> = ({ title, items, type }) => {
                 }}>
                    {icon}
                 </div>
-                <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', margin: 0 }}>{title}</h3>
-                <span style={{ marginLeft: 'auto', fontSize: '20px', color: '#9ca3af', transition: 'transform 0.3s ease', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+                <h3 style={{ fontSize: '20px', fontWeight: '700', margin: 0 }} className="text-slate-900 dark:text-white">{title}</h3>
+                <span style={{ marginLeft: 'auto', fontSize: '20px', transition: 'transform 0.3s ease', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }} className="text-slate-400 dark:text-slate-500">▼</span>
             </div>
             
             {isExpanded && (
@@ -80,7 +81,7 @@ const InsightsList: React.FC<InsightsListProps> = ({ title, items, type }) => {
                             }}>
                                {icon}
                             </div>
-                            <span style={{ fontSize: '14px', color: '#6b7280', lineHeight: '1.5' }}>{item}</span>
+                            <span style={{ fontSize: '15px', lineHeight: '1.6' }} className="text-slate-600 dark:text-slate-300">{item}</span>
                         </li>
                     ))}
                 </ul>

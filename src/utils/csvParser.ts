@@ -242,14 +242,13 @@ export function parseCSV(csvContent: string): CSVParseResult {
     const monthKey = date.toLocaleString('en-US', { year: 'numeric', month: 'long' });
     monthlyMap.set(monthKey, (monthlyMap.get(monthKey) || 0) + spendingAmount);
 
-    // Aggregate daily spending - use timezone-safe date formatting
-    // Get UTC date components to avoid timezone shifts
+    // Aggregate daily spending - store with full date (YYYY-MM-DD) as key for proper sorting
+    // Get UTC date components
     const utcYear = date.getUTCFullYear();
-    const utcMonth = date.getUTCMonth();
-    const utcDate = date.getUTCDate();
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const dayKey = `${monthNames[utcMonth]} ${utcDate}`;
-    dailyMap.set(dayKey, (dailyMap.get(dayKey) || 0) + spendingAmount);
+    const utcMonth = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const utcDate = String(date.getUTCDate()).padStart(2, '0');
+    const dayKeyForMap = `${utcYear}-${utcMonth}-${utcDate}`;
+    dailyMap.set(dayKeyForMap, (dailyMap.get(dayKeyForMap) || 0) + spendingAmount);
 
     // Aggregate weekly spending (Monday-Sunday weeks)
     const weekStart = getWeekStart(date);
@@ -273,26 +272,22 @@ export function parseCSV(csvContent: string): CSVParseResult {
       return dateA.getTime() - dateB.getTime();
     });
 
-  // Convert daily map to array
+  // Convert daily map to array - sort by actual date, then display as "Mon Day"
   const dailySpending: DailySpending[] = Array.from(dailyMap.entries())
-    .map(([name, spending]) => ({ name, spending }))
-    .sort((a, b) => {
-      // Sort chronologically by parsing date
-      const months: { [key: string]: number } = {
-        'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6,
-        'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12
+    .map(([dateKey, spending]) => {
+      // dateKey is in format YYYY-MM-DD
+      const date = new Date(dateKey);
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = monthNames[date.getUTCMonth()];
+      const day = date.getUTCDate();
+      return {
+        name: `${month} ${day}`,
+        spending,
+        sortKey: dateKey // Keep sort key for sorting
       };
-      const parts_a = a.name.trim().split(/\s+/);
-      const parts_b = b.name.trim().split(/\s+/);
-      const monthA = parts_a[0];
-      const dayA = parseInt(parts_a[1]);
-      const monthB = parts_b[0];
-      const dayB = parseInt(parts_b[1]);
-      // Create dates with proper day-of-month (not month index)
-      const dateA = new Date(new Date().getFullYear(), months[monthA] - 1, dayA);
-      const dateB = new Date(new Date().getFullYear(), months[monthB] - 1, dayB);
-      return dateA.getTime() - dateB.getTime();
-    });
+    })
+    .sort((a, b) => (a.sortKey as string).localeCompare(b.sortKey as string)) // Sort by YYYY-MM-DD string
+    .map(({ name, spending }) => ({ name, spending })); // Strip sortKey from output
 
   // Convert weekly map to array
   const weeklySpending: WeeklySpending[] = Array.from(weeklyMap.entries())

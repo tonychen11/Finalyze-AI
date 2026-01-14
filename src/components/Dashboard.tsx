@@ -13,24 +13,23 @@ interface DashboardProps {
 
 const StatCard: React.FC<{ title: string; value: string | number; }> = ({ title, value }) => (
     <div style={{
-      backgroundColor: '#ffffff',
       padding: '24px',
       borderRadius: '16px',
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-      border: '1px solid #f0f0f0',
       transition: 'all 0.3s ease',
-      cursor: 'default'
+      cursor: 'default',
+      backgroundColor: 'var(--card-bg)',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+      border: '1px solid var(--card-border)'
     }}
+    className="dark:bg-slate-800 dark:border-slate-700 dark:shadow-lg"
     onMouseEnter={(e) => {
       e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.10)';
-      e.currentTarget.style.borderColor = '#e5e7eb';
     }}
     onMouseLeave={(e) => {
       e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.06)';
-      e.currentTarget.style.borderColor = '#f0f0f0';
     }}>
-        <p style={{ fontSize: '13px', color: '#6b7280', margin: '0 0 8px 0', fontWeight: '500', letterSpacing: '0.3px' }}>{title}</p>
-        <p style={{ fontSize: '32px', fontWeight: '600', color: '#2563eb', margin: 0 }}>{value}</p>
+        <p style={{ fontSize: '13px', margin: '0 0 8px 0', fontWeight: '500', letterSpacing: '0.3px' }} className="text-slate-600 dark:text-slate-400">{title}</p>
+        <p style={{ fontSize: '32px', fontWeight: '600', color: '#2563eb', margin: 0 }} className="dark:text-blue-400">{value}</p>
     </div>
 );
 
@@ -41,7 +40,7 @@ const Dashboard: React.FC<DashboardProps> = ({ result, onReset }) => {
   return (
     <div style={{ animation: 'fadeIn 0.3s ease-in', display: 'flex', flexDirection: 'column', gap: '32px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <h2 style={{ fontSize: '32px', fontWeight: '700', color: '#1f2937', margin: 0, letterSpacing: '-0.5px' }}>Financial Dashboard</h2>
+            <h2 style={{ fontSize: '32px', fontWeight: '700', margin: 0, letterSpacing: '-0.5px' }} className="text-slate-900 dark:text-white">Financial Dashboard</h2>
             <button
                 onClick={onReset}
                 style={{
@@ -79,12 +78,12 @@ const Dashboard: React.FC<DashboardProps> = ({ result, onReset }) => {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '20px', gridAutoFlow: 'dense' }}>
-            <div style={{ gridColumn: 'span 1', backgroundColor: '#ffffff', padding: '28px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)', border: '1px solid #f0f0f0' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px', color: '#1f2937', margin: '0 0 20px 0' }}>Spending by Category</h3>
+            <div style={{ gridColumn: 'span 1', padding: '28px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)', border: '1px solid var(--card-border)', backgroundColor: 'var(--card-bg)' }} className="dark:bg-slate-800 dark:border-slate-700">
+                <h3 style={{ fontSize: '22px', fontWeight: '700', margin: '0 0 20px 0' }} className="text-slate-900 dark:text-white">Spending by Category</h3>
                 <CategoryPieChart data={result.categorySpending} />
             </div>
-             <div style={{ gridColumn: 'span 1', backgroundColor: '#ffffff', padding: '28px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)', border: '1px solid #f0f0f0' }}>
-                <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '20px', color: '#1f2937', margin: '0 0 20px 0' }}>Spending Trend</h3>
+             <div style={{ gridColumn: 'span 1', padding: '28px', borderRadius: '16px', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)', border: '1px solid var(--card-border)', backgroundColor: 'var(--card-bg)' }} className="dark:bg-slate-800 dark:border-slate-700">
+                <h3 style={{ fontSize: '22px', fontWeight: '700', margin: '0 0 20px 0' }} className="text-slate-900 dark:text-white">Spending Trend</h3>
                 <SpendingBarChart monthlyData={result.monthlySpending} dailyData={result.dailySpending} weeklyData={result.weeklySpending} />
             </div>
         </div>

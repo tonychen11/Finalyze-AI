@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { AnalysisResult } from '@/types';
 import UploadScreen from '@/components/UploadScreen';
 import Dashboard from '@/components/Dashboard';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { MOCK_CATEGORY_SPENDING, MOCK_MONTHLY_SPENDING, MOCK_TRANSACTION_COUNT, MOCK_TOTAL_SPENDING } from '@/utils/mockData';
 
 export default function Home() {
@@ -159,12 +160,15 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen text-slate-900 flex flex-col items-center p-4 sm:p-6 lg:p-8">
-      <header className="w-full max-w-7xl mx-auto mb-8 text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold text-slate-900">
-          Finalyze <span className="text-blue-600">AI</span>
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col items-center p-4 sm:p-6 lg:p-8 transition-colors">
+      <header className="w-full max-w-7xl mx-auto mb-8 text-center flex flex-col items-center gap-4">
+        <div className="flex justify-center w-full">
+          <ThemeToggle />
+        </div>
+        <h1 className="text-5xl sm:text-6xl font-bold text-slate-900 dark:text-white">
+          Finalyze <span className="text-blue-600 dark:text-blue-400">AI</span>
         </h1>
-        <p className="text-slate-600 mt-2 text-lg">
+        <p className="text-slate-600 dark:text-slate-400 mt-2 text-xl">
           Upload your bank statement to get AI-powered insights.
         </p>
       </header>
@@ -175,7 +179,7 @@ export default function Home() {
           <UploadScreen onFileUpload={handleFileUpload} isLoading={isLoading} error={error} />
         )}
       </main>
-      <footer className="w-full max-w-7xl mx-auto mt-8 text-center text-slate-500 text-sm">
+      <footer className="w-full max-w-7xl mx-auto mt-8 text-center text-slate-500 dark:text-slate-400 text-sm">
         <p>&copy; {new Date().getFullYear()} Finalyze-AI. All rights reserved.</p>
       </footer>
     </div>

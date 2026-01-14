@@ -19,7 +19,7 @@ const CustomTooltip = ({ active, payload }: any) => {
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
               border: 'none'
             }}>
-                <p style={{ margin: 0, fontSize: '14px', fontWeight: '500', color: '#1f2937' }}>
+                <p style={{ margin: 0, fontSize: '16px', fontWeight: '500', color: '#1f2937' }}>
                   {`${data.name}: $${data.value.toFixed(2)}`}
                 </p>
             </div>
@@ -66,19 +66,20 @@ const CategoryPieChart: React.FC<CategoryPieChartProps> = ({ data }) => {
         gap: '12px',
         paddingTop: '12px',
         borderTop: '1px solid #f0f0f0'
-      }}>
+      }}
+      className="dark:border-slate-700">
         {sortedData.map((item, index) => (
           <div 
             key={`legend-item-${index}`} 
             style={{ 
-              fontSize: '14px', 
-              color: '#6b7280',
+              fontSize: '15px', 
               display: 'flex', 
               alignItems: 'center', 
               gap: '12px',
               fontWeight: '400',
               letterSpacing: '0.3px'
             }}
+            className="text-slate-600 dark:text-slate-200"
           >
             <span style={{ 
               display: 'inline-block', 
@@ -89,7 +90,7 @@ const CategoryPieChart: React.FC<CategoryPieChartProps> = ({ data }) => {
               flexShrink: 0
             }} />
             <span style={{ flex: 1 }}>{item.name}</span>
-            <span style={{ fontWeight: '500', color: '#1f2937', minWidth: '80px', textAlign: 'right' }}>${item.value.toFixed(2)}</span>
+            <span style={{ fontWeight: '500', minWidth: '80px', textAlign: 'right' }} className="text-slate-900 dark:text-slate-300">${item.value.toFixed(2)}</span>
           </div>
         ))}
       </div>

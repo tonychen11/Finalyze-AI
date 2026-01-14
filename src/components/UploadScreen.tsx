@@ -59,18 +59,19 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onFileUpload, isLoading, er
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: '60vh',
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--upload-bg)',
       borderRadius: '20px',
       padding: '40px 32px',
-      border: '1px solid #f0f0f0',
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)'
-    }}>
+      border: '1px solid var(--upload-border)',
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+    }}
+    className="dark:bg-slate-900 dark:border-slate-700">
       {isLoading ? (
         <AnalysisProgress isLoading={isLoading} />
       ) : (
         <>
-          <h2 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '16px', color: '#1f2937', letterSpacing: '-0.5px' }}>Upload Your Statement</h2>
-          <p style={{ color: '#6b7280', marginBottom: '32px', maxWidth: '500px', textAlign: 'center', fontSize: '14px', lineHeight: '1.6' }}>
+          <h2 style={{ fontSize: '36px', fontWeight: '700', marginBottom: '16px', letterSpacing: '-0.5px' }} className="text-slate-900 dark:text-white">Upload Your Statement</h2>
+          <p style={{ marginBottom: '32px', maxWidth: '500px', textAlign: 'center', fontSize: '16px', lineHeight: '1.6' }} className="text-slate-600 dark:text-slate-400">
             Drop your CSV or Excel file here to begin. Your data is processed securely.
           </p>
 
@@ -84,14 +85,15 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onFileUpload, isLoading, er
               maxWidth: '500px',
               padding: '40px 32px',
               border: '2px dashed',
-              borderColor: isDragging ? '#2563eb' : '#e5e7eb',
+              borderColor: isDragging ? '#2563eb' : 'var(--upload-border-dashed)',
               borderRadius: '16px',
               textAlign: 'center',
               transition: 'all 0.3s ease',
-              backgroundColor: isDragging ? '#eff6ff' : '#f9fafb',
+              backgroundColor: isDragging ? '#eff6ff' : 'var(--upload-drop-bg)',
               cursor: 'pointer',
               transform: isDragging ? 'scale(1.02)' : 'scale(1)'
             }}
+            className="dark:bg-slate-800 dark:border-slate-600 dark:hover:border-slate-500"
           >
             <input
               type="file"
@@ -103,14 +105,14 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onFileUpload, isLoading, er
             <label htmlFor="file-upload" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <UploadIcon style={{ width: '48px', height: '48px', color: '#2563eb', marginBottom: '16px' }} />
               {selectedFile ? (
-                <span style={{ color: '#1f2937', fontWeight: '500', fontSize: '16px' }}>{selectedFile.name}</span>
+                <span style={{ fontWeight: '500', fontSize: '16px' }} className="text-slate-900 dark:text-white">{selectedFile.name}</span>
               ) : (
                 <>
                   <span style={{ fontWeight: '600', color: '#2563eb', fontSize: '16px' }}>Click to upload</span>
-                  <span style={{ color: '#9ca3af', fontSize: '14px' }}> or drag and drop</span>
+                  <span style={{ fontSize: '14px' }} className="text-slate-500 dark:text-slate-400"> or drag and drop</span>
                 </>
               )}
-              <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '12px', margin: '12px 0 0 0' }}>CSV or XLSX (MAX. 10MB)</p>
+              <p style={{ fontSize: '12px', marginTop: '12px', margin: '12px 0 0 0' }} className="text-slate-500 dark:text-slate-400">CSV or XLSX (MAX. 10MB)</p>
             </label>
           </div>
 
@@ -154,7 +156,7 @@ const UploadScreen: React.FC<UploadScreenProps> = ({ onFileUpload, isLoading, er
             </button>
           )}
 
-          {error && <p style={{ color: '#ef4444', marginTop: '16px', fontSize: '14px' }}>{error}</p>}
+          {error && <p style={{ marginTop: '16px', fontSize: '14px' }} className="text-red-500 dark:text-red-400">{error}</p>}
         </>
       )}
     </div>
